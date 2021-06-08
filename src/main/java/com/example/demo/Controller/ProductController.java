@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.*;
 
@@ -22,16 +23,16 @@ public class ProductController {
 
 
 //    private final List<Product> productDB = new ArrayList();
-
-    @PostConstruct
-    private void initDB(){
-
-        productService.createProduct(new Product("B0001", "Android Development (Java)", 380));
-        productService.createProduct(new Product("B0002", "Android Development (Kotlin)", 420));
-        productService.createProduct(new Product("B0003", "Data Structure (Java)", 250));
-        productService.createProduct(new Product("B0004", "Finance Management", 450));
-        productService.createProduct(new Product("B0005", "Human Resource Management", 330));
-    }
+//
+//    @PostConstruct
+//    private void initDB(){
+//
+//        productService.createProduct(new Product("B0001", "Android Development (Java)", 380));
+//        productService.createProduct(new Product("B0002", "Android Development (Kotlin)", 420));
+//        productService.createProduct(new Product("B0003", "Data Structure (Java)", 250));
+//        productService.createProduct(new Product("B0004", "Finance Management", 450));
+//        productService.createProduct(new Product("B0005", "Human Resource Management", 330));
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable("id") String id){
@@ -52,9 +53,17 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product request) {
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product request) {
 
         Product product = productService.createProduct(request);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(product.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(product);
 
 //        boolean isIdDuplicated = productDB.stream()
 //                .anyMatch(p -> p.getId().equals(request.getId()));
@@ -67,19 +76,12 @@ public class ProductController {
 //        product.setName(request.getName());
 //        product.setPrice(request.getPrice());
 //        productDB.add(product);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(product.getId())
-                .toUri();
-
-        return ResponseEntity.created(location).body(product);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> replaceProduct(
-            @PathVariable("id") String id, @RequestBody Product request){
+            @PathVariable("id") String id,
+            @Valid @RequestBody Product request){
 
         Product product = productService.replaceProduct(id, request);
 

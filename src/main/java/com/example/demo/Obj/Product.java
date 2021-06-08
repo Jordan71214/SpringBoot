@@ -1,9 +1,19 @@
 package com.example.demo.Obj;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+
+@Document(collection = "product")
 public class Product {
 
     private String id;
+
+    @NotEmpty
     private String name;
+
+    @Min(0)
     private int price;
 
     public String getId() {
