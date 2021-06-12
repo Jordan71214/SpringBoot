@@ -28,9 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -198,5 +196,39 @@ public class CustomerTest {
 
         Assert.assertEquals(HttpStatus.OK.value(), mockHttpServletResponse.getStatus());
         Assert.assertEquals(MediaType.APPLICATION_JSON_VALUE, mockHttpServletResponse.getContentType());
+    }
+
+    @Test
+    public void get400WhenCreateCustomerWithEmptyName() throws Exception {
+
+        JSONObject request = new JSONObject();
+        request.put("name", "");
+        request.put("gender", "Male");
+        request.put("salary", 100);
+
+        mockMvc.perform(
+                post("/customers")
+                .headers(httpHeaders)
+                .content(request.toString()))
+                .andExpect(status().isBadRequest());
+
+
+    }
+
+    @Test
+    public void get400WhenReplaceCustomerWithNegativeSalary() throws Exception {
+        Customer customer = createCustomer("HuangJianZhi", "Male", 100);
+        customerRepository.insert(customer);
+
+        JSONObject request = new JSONObject();
+        request.put("name", "HuangJianZhi");
+        request.put("gender", "Male");
+        request.put("salary", -1);
+
+        mockMvc.perform(
+                put("/customers/" + customer.getId())
+                .headers(httpHeaders)
+                .content(request.toString()))
+                .andExpect(status().isBadRequest());
     }
 }

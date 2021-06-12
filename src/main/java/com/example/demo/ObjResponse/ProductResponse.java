@@ -1,13 +1,6 @@
-package com.example.demo.Obj;
+package com.example.demo.ObjResponse;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-
-@Document(collection = "product")
-public class Product {
-
+public class ProductResponse {
     private String id;
     private String name;
     private int price;
@@ -19,8 +12,6 @@ public class Product {
     public void setId(String id) {
         this.id = id;
     }
-
-
 
     public String getName() {
         return name;
@@ -37,15 +28,4 @@ public class Product {
     public void setPrice(int price) {
         this.price = price;
     }
-
-
-    public Product(String id, String name, int price) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-    }
-
-    public Product(){}
-
-
 }

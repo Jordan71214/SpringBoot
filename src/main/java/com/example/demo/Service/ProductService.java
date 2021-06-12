@@ -1,11 +1,13 @@
 package com.example.demo.Service;
 
 import com.example.demo.DAO.ProductRepository;
-import com.example.demo.Exception.ConflictException;
 import com.example.demo.Exception.NotFoundException;
 import com.example.demo.DAO.MockProductDAO;
 import com.example.demo.Obj.Product;
 import com.example.demo.Obj.ProductQueryParameter;
+import com.example.demo.ObjResponse.ProductResponse;
+import com.example.demo.objRequest.ProductConverter;
+import com.example.demo.objRequest.ProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -22,31 +25,34 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
-    public Product createProduct(Product request) {
+    public ProductResponse createProduct(ProductRequest request) {
 
+        Product product = ProductConverter.toProduct(request);
+        product = repository.insert(product);
 
-        Product product = new Product();
-        product.setName(request.getName());
-        product.setPrice(request.getPrice());
-
-
-        return repository.insert(product);
+        return ProductConverter.toProductResponse(product);
     }
 
-    public Product replaceProduct(String id, Product request) {
+    public ProductResponse replaceProduct(String id, ProductRequest request) {
         Product oldProduct = getProduct(id);
 
-        Product product = new Product();
+        Product product = ProductConverter.toProduct(request);
         product.setId(oldProduct.getId());
-        product.setName(request.getName());
-        product.setPrice(request.getPrice());
 
-        return repository.save(product);
+        repository.save(product);
+
+        return ProductConverter.toProductResponse(product);
     }
 
     public void deleteProduct(String id) {
 
         repository.deleteById(id);
+    }
+
+    public ProductResponse getProductResponse(String id) {
+        Product product = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Can't find product."));
+        return ProductConverter.toProductResponse(product);
     }
 
     public Product getProduct(String id) {
@@ -65,4 +71,33 @@ public class ProductService {
         }
         return repository.findByNameLikeIgnoreCase(nameKeyword, sort);
     }
+
+
+
+    public List<ProductResponse> getProductResponses(ProductQueryParameter param) {
+        String nameKeyWord = Optional.ofNullable(param.getKeyword()).orElse("");
+        int priceFrom = Optional.ofNullable(param.getPriceFrom()).orElse(0);
+        int priceTo = Optional.ofNullable(param.getPriceTo()).orElse(Integer.MAX_VALUE);
+        Sort sort = configureSort(param.getOrderBy(), param.getSortRule());
+
+        List<Product> products = repository.findByPriceBetweenAndNameLikeIgnoreCase(priceFrom, priceTo, nameKeyWord, sort);
+
+        return products.stream()
+                .map(ProductConverter::toProductResponse)
+                .collect(Collectors.toList());
+    }
+
+    private Sort configureSort(String orderBy, String sortRule) {
+        Sort sort = Sort.unsorted();
+        if (Objects.nonNull(orderBy) && Objects.nonNull(sortRule)) {
+            Sort.Direction direction = Sort.Direction.fromString(sortRule);
+            sort = Sort.by(direction, orderBy);
+
+        }
+
+        return sort;
+    }
+
+
+
 }

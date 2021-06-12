@@ -4,6 +4,7 @@ import com.example.demo.Obj.Customer;
 import com.example.demo.Obj.CustomerQueryParameter;
 import com.example.demo.Obj.Product;
 import com.example.demo.Service.CustomerService;
+import com.example.demo.objRequest.CustomerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,7 +45,7 @@ public class CustomerController {
 
 //    @PostMapping
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer request) {
+    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody CustomerRequest request) {
         Customer customer = customerService.createCustomer(request);
 
         URI location = ServletUriComponentsBuilder
@@ -57,7 +59,7 @@ public class CustomerController {
 //    @PutMapping("/{id}")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Customer> replaceCustomer(
-            @PathVariable("id") String id, @RequestBody Customer request) {
+            @PathVariable("id") String id, @Valid @RequestBody CustomerRequest request) {
 
         Customer customer = customerService.replaceCustomer(id, request);
         return ResponseEntity.ok().body(customer);

@@ -2,7 +2,9 @@ package com.example.demo.Controller;
 
 import com.example.demo.Obj.Product;
 import com.example.demo.Obj.ProductQueryParameter;
+import com.example.demo.ObjResponse.ProductResponse;
 import com.example.demo.Service.ProductService;
+import com.example.demo.objRequest.ProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +37,9 @@ public class ProductController {
 //    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable("id") String id){
-        Product product = productService.getProduct(id);
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable("id") String id){
+        ProductResponse product = productService.getProductResponse(id);
+
         return ResponseEntity.ok(product);
 
 //        Optional<Product> productOp = productDB.stream()
@@ -53,9 +56,9 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product request) {
+    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request) {
 
-        Product product = productService.createProduct(request);
+        ProductResponse product = productService.createProduct(request);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -79,11 +82,11 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> replaceProduct(
+    public ResponseEntity<ProductResponse> replaceProduct(
             @PathVariable("id") String id,
-            @Valid @RequestBody Product request){
+            @Valid @RequestBody ProductRequest request){
 
-        Product product = productService.replaceProduct(id, request);
+        ProductResponse product = productService.replaceProduct(id, request);
 
 //        Optional<Product> productOP = productDB.stream()
 //                .filter(p -> p.getId().equals(id))
@@ -126,11 +129,12 @@ public class ProductController {
 //    }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getProducts(
+    public ResponseEntity<List<ProductResponse>> getProducts(
             @ModelAttribute ProductQueryParameter param) {
 
-        List<Product> products = productService.getProducts(param);
+        List<ProductResponse> products = productService.getProductResponses(param);
         return ResponseEntity.ok(products);
+
 
 //        String nameKeyword = param.getKeyword();
 //        String orderBy = param.getOrderBy();

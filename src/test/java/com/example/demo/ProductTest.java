@@ -198,4 +198,20 @@ public class ProductTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    public void get400WhenReplaceProductWithNagitivePrice() throws Exception {
+        Product product = createProduct("Computer Science", 350);
+        productRepository.insert(product);
+
+        JSONObject request = new JSONObject();
+        request.put("name", "Computer Science");
+        request.put("price", -1);
+
+        mockMvc.perform(
+                put("/products/" + product.getId())
+                .headers(httpHeaders)
+                .content(request.toString()))
+                .andExpect(status().isBadRequest());
+    }
+
 }

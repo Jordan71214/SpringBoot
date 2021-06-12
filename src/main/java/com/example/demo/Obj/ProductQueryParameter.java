@@ -2,6 +2,25 @@ package com.example.demo.Obj;
 
 public class ProductQueryParameter {
     private String keyword;
+    private Integer priceFrom;
+
+    public Integer getPriceFrom() {
+        return priceFrom;
+    }
+
+    public void setPriceFrom(Integer priceFrom) {
+        this.priceFrom = priceFrom;
+    }
+
+    public Integer getPriceTo() {
+        return priceTo;
+    }
+
+    public void setPriceTo(Integer priceTo) {
+        this.priceTo = priceTo;
+    }
+
+    private Integer priceTo;
     private String orderBy;
     private String sortRule;
 
