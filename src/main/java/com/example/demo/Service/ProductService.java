@@ -17,13 +17,22 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
+//@Service
 public class ProductService {
 
-    @Autowired
-    private MockProductDAO productDAO;
-    @Autowired
+//    @Autowired
+//    private MockProductDAO productDAO;
+
+//    @Autowired
     private ProductRepository repository;
+
+    public ProductService(ProductRepository repository) {
+        this.repository = repository;
+    }
+
+
+
+
 
     public ProductResponse createProduct(ProductRequest request) {
 
