@@ -3,10 +3,11 @@ package com.example.demo.config;
 import com.example.demo.Service.MailService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.annotation.RequestScope;
 
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
@@ -184,8 +185,11 @@ public class MailConfig {
     }
 
     @Bean
+    @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+    @RequestScope
     public MailService mailService() throws Exception {
 //        該方法會判斷環境參數, 並生成指定的元件
+        System.out.println("Create mail service.");
         return "yahoo".equals(platform)
                 ? yahooMailService()
                 : gmailService();

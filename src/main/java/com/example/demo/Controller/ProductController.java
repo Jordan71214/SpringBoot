@@ -3,6 +3,7 @@ package com.example.demo.Controller;
 import com.example.demo.Obj.Product;
 import com.example.demo.Obj.ProductQueryParameter;
 import com.example.demo.ObjResponse.ProductResponse;
+import com.example.demo.Service.MailService;
 import com.example.demo.Service.ProductService;
 import com.example.demo.objRequest.ProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private MailService mailService;
 
 //    private final List<Product> productDB = new ArrayList();
 //
@@ -39,6 +42,9 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> getProduct(@PathVariable("id") String id){
         ProductResponse product = productService.getProductResponse(id);
+//        多次呼叫ProductService方法, 測試proxyMode = ScopedProxyMode.TARGET_CLASS 每次呼叫時, 都建立新的實例
+//        product = productService.getProductResponse(id);
+//        product = productService.getProductResponse(id);
 
         return ResponseEntity.ok(product);
 
@@ -59,7 +65,7 @@ public class ProductController {
     public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request) {
 
         ProductResponse product = productService.createProduct(request);
-
+        mailService.sendNewProductMail(product.getId());
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

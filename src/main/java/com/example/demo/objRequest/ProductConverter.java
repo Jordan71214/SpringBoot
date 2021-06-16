@@ -18,7 +18,7 @@ public class ProductConverter {
         ProductResponse response = new ProductResponse();
         response.setId(request.getId());
         response.setPrice(request.getPrice());
-        response.setName(response.getName());
+        response.setName(request.getName());
 
         return response;
     }

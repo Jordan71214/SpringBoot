@@ -16,13 +16,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@Service
+//這遍用config檔去建立元件
+//@Service
 public class CustomerService {
 
-    @Autowired
-    private MockCustomerDAO customerDAO;
-    @Autowired
+//    @Autowired
+//    private MockCustomerDAO customerDAO;
+
+//  需要注入的部分, 在CustomerServiceConfig建立元件時, 使用param注入
+//    @Autowired
     private CustomerRepository repository;
+
+    public CustomerService(CustomerRepository repository) {
+        this.repository = repository;
+    }
+
 
     public Customer createCustomer(CustomerRequest request) {
 //

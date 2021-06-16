@@ -1,0 +1,13 @@
+@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+Spring生成時建立實例, ioC擁有唯一實例
+
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+情況一: Autowired時, 依賴注入建立
+情況二: 自行創建Bean時, 用完即丟
+
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
+Spring啟動時不建立, 呼叫時, 每次都建立一個新的實例
+
+@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+@RequestScope
+等價, 呼叫時建立, 在次呼叫時, 使用同例, 請求結束後, 此例銷毀

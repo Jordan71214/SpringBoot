@@ -25,9 +25,11 @@ public class ProductService {
 
 //    @Autowired
     private ProductRepository repository;
+    private MailService mailService;
 
-    public ProductService(ProductRepository repository) {
+    public ProductService(ProductRepository repository, MailService mailService) {
         this.repository = repository;
+        this.mailService = mailService;
     }
 
 
@@ -39,6 +41,7 @@ public class ProductService {
         Product product = ProductConverter.toProduct(request);
         product = repository.insert(product);
 
+        mailService.sendNewProductMail(product.getId());
         return ProductConverter.toProductResponse(product);
     }
 
@@ -54,6 +57,7 @@ public class ProductService {
     }
 
     public void deleteProduct(String id) {
+        mailService.sendDeleteProductMail(id);
 
         repository.deleteById(id);
     }
