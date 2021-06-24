@@ -1,0 +1,7 @@
+Api -> Controller -> Service -> DataBase
+Api -> request -> FilterChain()擷取,  filterChain.doFilter(request, response) -> Controller
+1. 建立Bean FilterRegistrationBean, setFilter(Filter)加入filter, addUrlPatterns("")設置擷取的Api路徑, setName("")設置名稱
+2. setOrder(int), 設置filter的執行順序, beanA.setOrder(0), beanB.setOrder(1). -> A(request) -> B(request) -> B(response) -> A(response)
+3. 多次對request, response doFilter(),  資料會被讀取走, 用ContentCachingRequestWrapper, ContentCachingResponseWrapper讀取資料, 在用copyBodyToResponse(), 把資料寫回回應主體, 後續的response即可繼續使用該數據
+4. @WebFilter(urlPatterns = "/*", filterName = ""), 用Spring創建bean, parma1 -> addUrlPatterns(""), param2 -> setName("")
+5. 使用Spring創建時, 需要在啟動Class加上@ServletComponentScan 標記

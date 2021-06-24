@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import com.example.demo.filter.LogApiFilter;
+import com.example.demo.filter.LogProcessFilterCustomer;
 import com.example.demo.filter.LogProcessTimeFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,17 @@ public class FilterConfig {
         bean.addUrlPatterns("/*");
         bean.setName("logApiFilter");
         bean.setOrder(0);
+        return bean;
+    }
+
+    @Bean
+    public FilterRegistrationBean logProcessFilterCustomer() {
+        FilterRegistrationBean<LogProcessFilterCustomer> bean = new FilterRegistrationBean<>();
+        bean.setFilter(new LogProcessFilterCustomer());
+        bean.addUrlPatterns("/*");
+        bean.setName("logProcessFilterCustomer");
+        bean.setOrder(2);
+
         return bean;
     }
 
