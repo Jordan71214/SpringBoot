@@ -1,6 +1,8 @@
 package com.example.demo.config;
 
+import com.example.demo.DAO.CustomerRepository;
 import com.example.demo.DAO.ProductRepository;
+import com.example.demo.Service.CustomerService;
 import com.example.demo.Service.MailService;
 import com.example.demo.Service.ProductService;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -20,6 +22,12 @@ public class ServiceConfig {
 //        return後, ioC容器就會取的return後的元件
         System.out.println("Create product service.");
         return new ProductService(repository, mailService);
+    }
+
+    @Bean
+    public CustomerService customerService(CustomerRepository repository) throws Exception {
+        System.out.println("Create customer service.");
+        return new CustomerService(repository);
     }
 
 
