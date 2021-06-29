@@ -1,7 +1,9 @@
 package com.example.demo.config;
 
+import com.example.demo.DAO.AppUserRepository;
 import com.example.demo.DAO.CustomerRepository;
 import com.example.demo.DAO.ProductRepository;
+import com.example.demo.Service.AppUserService;
 import com.example.demo.Service.CustomerService;
 import com.example.demo.Service.MailService;
 import com.example.demo.Service.ProductService;
@@ -30,5 +32,10 @@ public class ServiceConfig {
         return new CustomerService(repository);
     }
 
+    @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+    public AppUserService appUserService(AppUserRepository repository) {
+        return new AppUserService(repository);
+    }
 
 }
