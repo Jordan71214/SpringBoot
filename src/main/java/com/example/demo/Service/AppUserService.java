@@ -6,8 +6,7 @@ import com.example.demo.Exception.NotFoundException;
 import com.example.demo.Obj.app_user.AppUser;
 import com.example.demo.Obj.app_user.AppUserRequest;
 import com.example.demo.Obj.app_user.AppUserResponse;
-import com.example.demo.objRequest.AppUserConverter;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.converter.AppUserConverter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;

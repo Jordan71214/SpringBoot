@@ -2,15 +2,12 @@ package com.example.demo.Service;
 
 import com.example.demo.DAO.ProductRepository;
 import com.example.demo.Exception.NotFoundException;
-import com.example.demo.DAO.MockProductDAO;
 import com.example.demo.Obj.Product;
-import com.example.demo.Obj.ProductQueryParameter;
+import com.example.demo.parameter.ProductQueryParameter;
 import com.example.demo.ObjResponse.ProductResponse;
-import com.example.demo.objRequest.ProductConverter;
+import com.example.demo.converter.ProductConverter;
 import com.example.demo.objRequest.ProductRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;

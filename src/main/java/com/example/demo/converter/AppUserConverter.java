@@ -1,4 +1,4 @@
-package com.example.demo.objRequest;
+package com.example.demo.converter;
 
 import com.example.demo.Obj.app_user.AppUser;
 import com.example.demo.Obj.app_user.AppUserRequest;

@@ -1,7 +1,7 @@
 package com.example.demo.DAO;
 
 import com.example.demo.Obj.Customer;
-import com.example.demo.Obj.CustomerQueryParameter;
+import com.example.demo.parameter.CustomerQueryParameter;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

@@ -1,16 +1,12 @@
 package com.example.demo.Service;
 
 import com.example.demo.DAO.CustomerRepository;
-import com.example.demo.DAO.MockCustomerDAO;
-import com.example.demo.Exception.ConflictException;
 import com.example.demo.Exception.NotFoundException;
 import com.example.demo.Obj.Customer;
-import com.example.demo.Obj.CustomerQueryParameter;
-import com.example.demo.objRequest.CustomerConvert;
+import com.example.demo.parameter.CustomerQueryParameter;
+import com.example.demo.converter.CustomerConverter;
 import com.example.demo.objRequest.CustomerRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
@@ -40,7 +36,7 @@ public class CustomerService {
 //            throw new ConflictException("The id of the customer us duplicated.");
 //        }
 
-        Customer customer = CustomerConvert.toCustomer(request);
+        Customer customer = CustomerConverter.toCustomer(request);
 
 //        return customerDAO.insert(customer);
         return repository.insert(customer);
@@ -49,7 +45,7 @@ public class CustomerService {
     public Customer replaceCustomer(String id, CustomerRequest request) {
         Customer oldCustomer = getCustomer(id);
 
-        Customer customer = CustomerConvert.toCustomer(request);
+        Customer customer = CustomerConverter.toCustomer(request);
         customer.setId(oldCustomer.getId());
 //        return customerDAO.replace(customer.getId(), request);
         return repository.save(customer);

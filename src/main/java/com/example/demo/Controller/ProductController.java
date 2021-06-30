@@ -1,7 +1,6 @@
 package com.example.demo.Controller;
 
-import com.example.demo.Obj.Product;
-import com.example.demo.Obj.ProductQueryParameter;
+import com.example.demo.parameter.ProductQueryParameter;
 import com.example.demo.ObjResponse.ProductResponse;
 import com.example.demo.Service.MailService;
 import com.example.demo.Service.ProductService;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.*;
