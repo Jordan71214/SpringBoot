@@ -63,7 +63,7 @@ public class ProductController {
     public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request) {
 
         ProductResponse product = productService.createProduct(request);
-        mailService.sendNewProductMail(product.getId());
+
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

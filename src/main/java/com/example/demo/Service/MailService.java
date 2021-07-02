@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.auth.UserIdentity;
 import com.example.demo.config.MailConfig;
 import com.example.demo.objRequest.SendMailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,10 @@ public class MailService {
     private final Authenticator authenticator;
     private final List<String> mailMessages;
     private final long tag;
+
+    @Autowired
+    private UserIdentity userIdentity;
+
 //元件建立時一併接收資料
     public MailService(Properties props, InternetAddress fromAddress, Authenticator authenticator) {
         this.props = props;
@@ -66,13 +71,13 @@ public class MailService {
     }
 
     public void sendNewProductMail(String productId) {
-        String message = String.format("There's a new created product (%s)", productId);
-        sendMail("New Product", message, "none71214@gmail.com");
+        String message = String.format("Hi, %s. There's a new created product (%s)", userIdentity.getName(), productId);
+        sendMail("New Product", message, userIdentity.getEmail());
     }
 
     public void sendDeleteProductMail(String productId) {
-        String message = String.format("There's a product deleted (%s).", productId);
-        sendMail("Product Deleted", message, "none71214@gmail.com");
+        String message = String.format("Hi, %s. There's a product deleted (%s).",userIdentity.getName(), productId);
+        sendMail("Product Deleted", message, userIdentity.getEmail());
     }
 
     @PreDestroy

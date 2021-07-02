@@ -16,6 +16,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 //驗證方法
+/*
+docs.spring.io
+UserDetailsService
+
+locates the user based on username.
+ */
+
 @Service
 public class SpringUserService implements UserDetailsService {
 

@@ -35,7 +35,7 @@ public class FilterConfig {
     public FilterRegistrationBean logProcessFilterCustomer() {
         FilterRegistrationBean<LogProcessFilterCustomer> bean = new FilterRegistrationBean<>();
         bean.setFilter(new LogProcessFilterCustomer());
-        bean.addUrlPatterns("/*");
+        bean.addUrlPatterns("/customers/*");
         bean.setName("logProcessFilterCustomer");
         bean.setOrder(2);
 

@@ -32,10 +32,11 @@ public class JWTService {
 
 //      帳密驗證
 //      AuthenticationManager 接收Authentication介面物件, 可接收多種驗證方式, 以帳密驗證, 使用UsernamePasswordAuthenticationToken
-//      AuthenticationManager 接收到Authentication後, 會使用SecurityConfig的userDetailsService與passwordEncoder協助驗證帳號與密碼
+
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
-//      驗證成功後, 得到UsernamePasswordAuthenticationToken物件, 使用Authentication接收
+//      AuthenticationManager 接收到Authentication後, 會使用SecurityConfig的userDetailsService與passwordEncoder協助驗證帳號與密碼
+//      驗證, 得到UsernamePasswordAuthenticationToken物件, 使用Authentication接收
         authentication = authenticationManager.authenticate(authentication);
 
 //      principle 會變成UserDetailsService的return -> UserDetails物件

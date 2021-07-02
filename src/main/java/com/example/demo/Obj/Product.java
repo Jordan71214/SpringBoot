@@ -11,6 +11,7 @@ public class Product {
     private String id;
     private String name;
     private int price;
+    private String creator;
 
     public String getId() {
         return id;
@@ -38,6 +39,13 @@ public class Product {
         this.price = price;
     }
 
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
 
     public Product(String id, String name, int price) {
         this.id = id;

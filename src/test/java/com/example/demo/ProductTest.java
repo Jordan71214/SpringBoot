@@ -1,8 +1,12 @@
 package com.example.demo;
 
 
+import com.example.demo.DAO.AppUserRepository;
 import com.example.demo.DAO.ProductRepository;
 import com.example.demo.Obj.Product;
+import com.example.demo.Obj.app_user.AppUser;
+import com.example.demo.Obj.app_user.UserAuthority;
+import com.example.demo.objRequest.AuthRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.After;
@@ -17,15 +21,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.xmlunit.util.Mapper;
 
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -43,17 +50,22 @@ public class ProductTest {
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    AppUserRepository appUserRepository;
+
     @Before
     public void init() {
         productRepository.deleteAll();
-
+        appUserRepository.deleteAll();
         httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
     }
 
     @After
     public void clear() {
+
         productRepository.deleteAll();
+        appUserRepository.deleteAll();
     }
     @Autowired
     private MockMvc mockMvc;
@@ -80,6 +92,65 @@ public class ProductTest {
                 .andExpect(jsonPath("$.price").value(request.getInt("price")))
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
+    }
+
+    @Test
+    public void testCreateProduct2() throws Exception {
+//        config AppUser in database
+        String password = "enon71214";
+        AppUser appUser = new AppUser();
+        appUser.setEmailAddress("none71214@gmail.com");
+        appUser.setPassword(new BCryptPasswordEncoder().encode(password));
+        appUser.setName("Ken");
+        appUser.setAuthorities(Collections.singletonList(UserAuthority.ADMIN));
+        appUserRepository.insert(appUser);
+
+
+
+//        request post /auth api -> get the access token.
+//        created AuthRequest
+        AuthRequest authRequest = new AuthRequest();
+        authRequest.setUsername(appUser.getEmailAddress());
+        authRequest.setPassword(appUser.getPassword());
+
+//        request body
+        JSONObject JSONAuthRequest = new JSONObject();
+        JSONAuthRequest.put("username", appUser.getEmailAddress());
+        JSONAuthRequest.put("password", appUser.getPassword());
+
+//        request api route -> request method, api route, request header, request body,
+        RequestBuilder requestBuilder =
+                post("/auth").headers(httpHeaders).content(JSONAuthRequest.toString());
+
+        MvcResult result = mockMvc.perform(
+                requestBuilder)
+                .andExpect(status().isOk())
+                .andReturn();
+
+
+//        get the access token from response: JSON
+        JSONObject tokenRes = new JSONObject(result.getResponse().getContentAsString());
+        String accessToken = tokenRes.getString("token");
+
+
+//        add access token into the httpHeaders key: AUTHORIZATION, value: Bearer accessToken
+        httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+
+        JSONObject productReq = new JSONObject();
+        productReq.put("name", "Harry Potter");
+        productReq.put("price", 450);
+
+        mockMvc.perform(post("/products")
+        .headers(httpHeaders)
+        .content(productReq.toString()))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").hasJsonPath())
+                .andExpect(jsonPath("$.name").value(productReq.getString("name")))
+                .andExpect(jsonPath("$.price").value(productReq.getInt("price")))
+                .andExpect(jsonPath("$.creator").value(appUser.getId()));
+
+
+
     }
 
     private Product createProduct(String name, int price) {

@@ -3,10 +3,12 @@ package com.example.demo.Service;
 import com.example.demo.DAO.ProductRepository;
 import com.example.demo.Exception.NotFoundException;
 import com.example.demo.Obj.Product;
+import com.example.demo.auth.UserIdentity;
 import com.example.demo.parameter.ProductQueryParameter;
 import com.example.demo.ObjResponse.ProductResponse;
 import com.example.demo.converter.ProductConverter;
 import com.example.demo.objRequest.ProductRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
@@ -24,6 +26,9 @@ public class ProductService {
     private ProductRepository repository;
     private MailService mailService;
 
+    @Autowired
+    private UserIdentity userIdentity;
+
     public ProductService(ProductRepository repository, MailService mailService) {
         this.repository = repository;
         this.mailService = mailService;
@@ -36,6 +41,7 @@ public class ProductService {
     public ProductResponse createProduct(ProductRequest request) {
 
         Product product = ProductConverter.toProduct(request);
+        product.setCreator(userIdentity.getId());
         product = repository.insert(product);
 
         mailService.sendNewProductMail(product.getId());
@@ -47,6 +53,7 @@ public class ProductService {
 
         Product product = ProductConverter.toProduct(request);
         product.setId(oldProduct.getId());
+        product.setCreator(oldProduct.getCreator());
 
         repository.save(product);
 

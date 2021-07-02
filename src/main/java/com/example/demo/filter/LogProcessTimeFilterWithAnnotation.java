@@ -1,6 +1,8 @@
 package com.example.demo.filter;
 
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -15,8 +17,11 @@ public class LogProcessTimeFilterWithAnnotation extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         filterChain.doFilter(httpServletRequest, httpServletResponse);
 
+        ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(httpServletRequest);
+        ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(httpServletResponse);
+
         long startTime = System.currentTimeMillis();
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
+        filterChain.doFilter(requestWrapper, responseWrapper);
         long processTime = System.currentTimeMillis() - startTime;
 
         System.out.println(processTime + "ms. I'm created with annotation.");
