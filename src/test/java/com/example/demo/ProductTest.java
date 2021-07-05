@@ -97,9 +97,9 @@ public class ProductTest {
     @Test
     public void testCreateProduct2() throws Exception {
 //        config AppUser in database
-        String password = "enon71214";
+        String password = "password";
         AppUser appUser = new AppUser();
-        appUser.setEmailAddress("none71214@gmail.com");
+        appUser.setEmailAddress("account@gmail.com");
         appUser.setPassword(new BCryptPasswordEncoder().encode(password));
         appUser.setName("Ken");
         appUser.setAuthorities(Collections.singletonList(UserAuthority.ADMIN));
@@ -111,7 +111,7 @@ public class ProductTest {
 //        created AuthRequest
         AuthRequest authRequest = new AuthRequest();
         authRequest.setUsername(appUser.getEmailAddress());
-        authRequest.setPassword(appUser.getPassword());
+        authRequest.setPassword(password);
 
 //        request body
         JSONObject JSONAuthRequest = new JSONObject();

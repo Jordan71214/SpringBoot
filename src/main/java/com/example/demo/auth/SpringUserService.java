@@ -40,7 +40,7 @@ public class SpringUserService implements UserDetailsService {
                     .map(auth -> new SimpleGrantedAuthority(auth.name()))
                     .collect(Collectors.toList());
 
-            return new User(appUser.getEmailAddress(), appUser.getPassword(), authorities);
+            return new SpringUser(appUser);
 
         } catch (NotFoundException e) {
             throw new UsernameNotFoundException("Username is wrong.");
