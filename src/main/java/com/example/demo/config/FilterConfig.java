@@ -31,16 +31,16 @@ public class FilterConfig {
         return bean;
     }
 
-    @Bean
-    public FilterRegistrationBean logProcessFilterCustomer() {
-        FilterRegistrationBean<LogProcessFilterCustomer> bean = new FilterRegistrationBean<>();
-        bean.setFilter(new LogProcessFilterCustomer());
-        bean.addUrlPatterns("/customers/*");
-        bean.setName("logProcessFilterCustomer");
-        bean.setOrder(2);
-
-        return bean;
-    }
+//    @Bean
+//    public FilterRegistrationBean logProcessFilterCustomer() {
+//        FilterRegistrationBean<LogProcessFilterCustomer> bean = new FilterRegistrationBean<>();
+//        bean.setFilter(new LogProcessFilterCustomer());
+//        bean.addUrlPatterns("/customers/*");
+//        bean.setName("logProcessFilterCustomer");
+//        bean.setOrder(2);
+//
+//        return bean;
+//    }
 
 
 }

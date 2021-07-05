@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Service.JWTService;
 import com.example.demo.objRequest.AuthRequest;
+import com.sun.jdi.InvocationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,12 +25,22 @@ public class AuthController {
     private JWTService jwtService;
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> issueToken(@RequestBody AuthRequest request) {
-        String token = jwtService.generateToken(request);
-        Map<String, String> response = Collections.singletonMap("token", token);
-        System.out.println(response.get("token"));
+    public ResponseEntity<Map<String, String>> generateToken(@Valid @RequestBody AuthRequest request) {
 
-        return ResponseEntity.ok(response);
+        try {
+            String token = jwtService.generateToken(request);
+            Map<String, String> response = Collections.singletonMap("token", token);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            System.out.println("Cause of exception: " + e.toString());
+        }
+
+//        return ResponseEntity.ok(response);
+        return null;
+
+
     }
 
     @PostMapping("/parse")

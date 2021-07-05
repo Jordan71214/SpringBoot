@@ -115,8 +115,8 @@ public class ProductTest {
 
 //        request body
         JSONObject JSONAuthRequest = new JSONObject();
-        JSONAuthRequest.put("username", appUser.getEmailAddress());
-        JSONAuthRequest.put("password", appUser.getPassword());
+        JSONAuthRequest.put("username", authRequest.getUsername());
+        JSONAuthRequest.put("password", password);
 
 //        request api route -> request method, api route, request header, request body,
         RequestBuilder requestBuilder =
@@ -141,8 +141,8 @@ public class ProductTest {
         productReq.put("price", 450);
 
         mockMvc.perform(post("/products")
-        .headers(httpHeaders)
-        .content(productReq.toString()))
+                .headers(httpHeaders)
+                .content(productReq.toString()))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").hasJsonPath())
                 .andExpect(jsonPath("$.name").value(productReq.getString("name")))

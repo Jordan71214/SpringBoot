@@ -20,7 +20,7 @@ import java.util.Map;
 
 
 @Component
-public class JWTAuthenticationFilter extends OncePerRequestFilter {
+public class    JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     protected JWTService jwtService;

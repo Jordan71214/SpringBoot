@@ -35,11 +35,6 @@ public class SpringUserService implements UserDetailsService {
         try {
 //            從DB 用username 找出user後 用帳號與密碼 建立User物件 給驗證機制使用
             AppUser appUser = appUserService.getUserByEmail(username);
-
-            List<SimpleGrantedAuthority> authorities = appUser.getAuthorities().stream()
-                    .map(auth -> new SimpleGrantedAuthority(auth.name()))
-                    .collect(Collectors.toList());
-
             return new SpringUser(appUser);
 
         } catch (NotFoundException e) {
