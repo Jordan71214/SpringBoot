@@ -26,7 +26,8 @@ public class AuthController {
 
     @PostMapping
     public ResponseEntity<Map<String, String>> generateToken(@Valid @RequestBody AuthRequest request) {
-
+        System.out.println("Username: " + request.getUsername());
+        System.out.println("Password: " + request.getPassword());
         try {
             String token = jwtService.generateToken(request);
             Map<String, String> response = Collections.singletonMap("token", token);
