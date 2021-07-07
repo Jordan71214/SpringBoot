@@ -35,7 +35,7 @@ public class JWTService {
 
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
-//      AuthenticationManager 接收到Authentication後, 會使用SecurityConfig的userDetailsService與passwordEncoder協助驗證帳號與密碼
+
 //      驗證, 得到UsernamePasswordAuthenticationToken物件, 使用Authentication接收
         authentication = authenticationManager.authenticate(authentication);
 

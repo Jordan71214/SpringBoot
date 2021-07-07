@@ -3,6 +3,9 @@ package com.example.demo.Service;
 import com.example.demo.DAO.ProductRepository;
 import com.example.demo.Exception.NotFoundException;
 import com.example.demo.Obj.Product;
+import com.example.demo.aop.ActionType;
+import com.example.demo.aop.EntityType;
+import com.example.demo.aop.SendEmail;
 import com.example.demo.auth.UserIdentity;
 import com.example.demo.parameter.ProductQueryParameter;
 import com.example.demo.ObjResponse.ProductResponse;
@@ -37,17 +40,18 @@ public class ProductService {
 
 
 
-
+    @SendEmail(entity = EntityType.PRODUCT, action = ActionType.CREATE)
     public ProductResponse createProduct(ProductRequest request) {
 
         Product product = ProductConverter.toProduct(request);
         product.setCreator(userIdentity.getId());
         product = repository.insert(product);
 
-        mailService.sendNewProductMail(product.getId());
+//        mailService.sendNewProductMail(product.getId());
         return ProductConverter.toProductResponse(product);
     }
 
+    @SendEmail(entity = EntityType.PRODUCT, action = ActionType.UPDATE)
     public ProductResponse replaceProduct(String id, ProductRequest request) {
         Product oldProduct = getProduct(id);
 
@@ -60,8 +64,9 @@ public class ProductService {
         return ProductConverter.toProductResponse(product);
     }
 
+    @SendEmail(entity = EntityType.PRODUCT, action = ActionType.DELETE)
     public void deleteProduct(String id) {
-        mailService.sendDeleteProductMail(id);
+//        mailService.sendDeleteProductMail(id);
 
         repository.deleteById(id);
     }

@@ -6,6 +6,9 @@ import com.example.demo.Exception.NotFoundException;
 import com.example.demo.Obj.app_user.AppUser;
 import com.example.demo.Obj.app_user.AppUserRequest;
 import com.example.demo.Obj.app_user.AppUserResponse;
+import com.example.demo.aop.ActionType;
+import com.example.demo.aop.EntityType;
+import com.example.demo.aop.SendEmail;
 import com.example.demo.converter.AppUserConverter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -24,6 +27,7 @@ public class AppUserService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
+    @SendEmail(entity = EntityType.APP_USER, action = ActionType.CREATE)
     public AppUserResponse createUser(AppUserRequest request) {
         Optional<AppUser> existingUser = repository.findByEmailAddress(request.getEmailAddress());
 
